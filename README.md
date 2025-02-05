@@ -1,6 +1,8 @@
 # forest-fire-simulation
 
-An Electron application with Vue and TypeScript
+Ce projet est une simulation de propagation de feu de forêt. Il est réalisé avec Electron, Vite, Vue.js et TypeScript.
+
+Le cahier des charges est disponible [ici](cdc.md).
 
 ## Recommended IDE Setup
 

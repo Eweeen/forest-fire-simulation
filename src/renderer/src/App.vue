@@ -9,7 +9,8 @@ const defaultParams = ref<ForestParams>({
   height: 20,
   terrainType: 'continue',
   humidity: 'normal',
-  windStrength: 1
+  windStrength: 1,
+  road: undefined
 });
 
 const step = ref<number>(0);

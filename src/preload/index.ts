@@ -4,6 +4,7 @@ interface CaseState {
   vegetation: boolean; // true = végétation, false = inerte
   fireState: 'none' | 'burning' | 'hot' | 'cold';
   burningIteration: number; // Nombre d'itérations depuis l'allumage du feu
+  road: boolean;
 }
 
 interface ForestParams {

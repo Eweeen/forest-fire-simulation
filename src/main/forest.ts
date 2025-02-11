@@ -36,7 +36,7 @@ const HUMIDITY_DISTRIBUTION = {
   very_dry: 0.9
 };
 
-const WIND_DISTRIBUTION: Record<number, WindDistribution[]> = {
+const WIND_DISTRIBUTION = {
   0: [
     { x: -1, y: -2, prob: 0.1 },
     { x: 0, y: -2, prob: 0.1 },
@@ -58,6 +58,49 @@ const WIND_DISTRIBUTION: Record<number, WindDistribution[]> = {
     { x: -1, y: 2, prob: 0.1 },
     { x: 0, y: 2, prob: 0.1 },
     { x: 1, y: 2, prob: 0.1 }
+  ],
+  1: [
+    { x: -1, y: -1, prob: 0.1 },
+    { x: 0, y: -1, prob: 0.2 },
+    { x: 1, y: -1, prob: 0.1 },
+    { x: -1, y: 0, prob: 0.3 },
+    { x: 1, y: 0, prob: 0.3 },
+    { x: -1, y: 1, prob: 0.3 },
+    { x: 0, y: 1, prob: 0.4 },
+    { x: 1, y: 1, prob: 0.3 },
+    { x: -1, y: 2, prob: 0.02 },
+    { x: 0, y: 2, prob: 0.05 },
+    { x: 1, y: 2, prob: 0.02 }
+  ],
+  2: [
+    { x: -1, y: -1, prob: 0.05 },
+    { x: 0, y: -1, prob: 0.1 },
+    { x: 1, y: -1, prob: 0.05 },
+    { x: -1, y: 0, prob: 0.25 },
+    { x: 1, y: 0, prob: 0.25 },
+    { x: -1, y: 1, prob: 0.4 },
+    { x: 0, y: 1, prob: 0.5 },
+    { x: 1, y: 1, prob: 0.4 },
+    { x: -1, y: 2, prob: 0.05 },
+    { x: 0, y: 2, prob: 0.1 },
+    { x: 1, y: 2, prob: 0.05 },
+    { x: 0, y: 3, prob: 0.01 }
+  ],
+  3: [
+    { x: -1, y: -1, prob: 0.005 },
+    { x: 0, y: -1, prob: 0.01 },
+    { x: 1, y: -1, prob: 0.005 },
+    { x: -1, y: 0, prob: 0.1 },
+    { x: 1, y: 0, prob: 0.1 },
+    { x: -1, y: 1, prob: 0.5 },
+    { x: 0, y: 1, prob: 0.7 },
+    { x: 1, y: 1, prob: 0.5 },
+    { x: -1, y: 2, prob: 0.2 },
+    { x: 0, y: 2, prob: 0.3 },
+    { x: 1, y: 2, prob: 0.2 },
+    { x: -1, y: 3, prob: 0.01 },
+    { x: 0, y: 3, prob: 0.05 },
+    { x: 1, y: 3, prob: 0.01 }
   ]
 };
 

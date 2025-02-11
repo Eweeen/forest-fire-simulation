@@ -1,6 +1,6 @@
 {
   "name": "forest-fire-simulation",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "A fire forest simulation in Electron with Vue and TypeScript",
   "main": "app/main/index.js",
   "author": "Ewen",

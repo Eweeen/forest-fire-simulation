@@ -30,7 +30,7 @@ const getCellClass = (cell: CaseState): string => {
     case 'cold':
       return 'cold';
     default:
-      return cell.vegetation ? `vegetation` : 'empty';
+      return cell.vegetation ? `vegetation ${props.params.humidity}` : 'empty';
   }
 };
 </script>
@@ -63,12 +63,25 @@ const getCellClass = (cell: CaseState): string => {
 }
 
 /* Couleurs des cases */
-.vegetation {
+.vegetation.wet {
+  background-color: #14532d;
+}
+.vegetation.normal {
   background-color: #4d7c0f;
+}
+.vegetation.dry {
+  background-color: #22c55e;
+}
+.vegetation.very-dry {
+  background-color: #4ade80;
 }
 
 .empty {
   background-color: #431407;
+}
+
+.road {
+  background-color: #57534e;
 }
 
 .burning {

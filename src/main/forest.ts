@@ -8,6 +8,7 @@ interface ForestParams {
   width: number;
   height: number;
   terrainType: 'continue' | 'closely-spaced' | 'spaced' | 'sparse';
+  humidity: 'wet' | 'normal' | 'dry' | 'very_dry';
 }
 
 interface WindDistribution {
@@ -26,6 +27,13 @@ const TERRAIN_DISTRIBUTION = {
   'closely-spaced': 0.95,
   spaced: 0.8,
   sparse: 0.5
+};
+
+const HUMIDITY_DISTRIBUTION = {
+  wet: 0.1,
+  normal: 0.3,
+  dry: 0.6,
+  very_dry: 0.9
 };
 
 const WIND_DISTRIBUTION: Record<number, WindDistribution[]> = {
@@ -79,12 +87,13 @@ export const createGround = (params: ForestParams): CaseState[][] => {
  * Le vent vient toujours d'en haut.
  *
  * @param {CaseState[][]} grid
- * @param {ForestParams} _forestParams
+ * @param {ForestParams} forestParams
  * @returns
  */
-export const simulateStep = (grid: CaseState[][], _forestParams: ForestParams): Result => {
+export const simulateStep = (grid: CaseState[][], forestParams: ForestParams): Result => {
   const newGrid: CaseState[][] = JSON.parse(JSON.stringify(grid));
 
+  const humidityProb = HUMIDITY_DISTRIBUTION[forestParams.humidity];
   const brandonEmissionProb = 0.005;
   const distribution = WIND_DISTRIBUTION[0];
 
@@ -107,12 +116,12 @@ export const simulateStep = (grid: CaseState[][], _forestParams: ForestParams): 
 
       // Propagation du feu
       if (currentCase.fireState === 'burning') {
-        _burningCase(newGrid, x, y, distribution);
+        _burningCase(newGrid, x, y, distribution, humidityProb);
       }
 
       // Émission de brandons
       if (currentCase.fireState === 'hot' && Math.random() < brandonEmissionProb) {
-        _burningCase(newGrid, x, y, distribution);
+        _burningCase(newGrid, x, y, distribution, humidityProb);
       }
     }
   }
@@ -137,7 +146,8 @@ function _burningCase(
   grid: CaseState[][],
   x: number,
   y: number,
-  distribution: WindDistribution[]
+  distribution: WindDistribution[],
+  humidityProb: number
 ): void {
   for (const { x: dx, y: dy, prob } of distribution) {
     const nx = x + dx;
@@ -147,7 +157,9 @@ function _burningCase(
       const neighbor = grid[nx][ny];
 
       if (neighbor.vegetation && neighbor.fireState === 'none' && Math.random() < prob) {
-        grid[nx][ny].fireState = 'burning';
+        if (Math.random() < humidityProb) {
+          grid[nx][ny].fireState = 'burning';
+        }
       }
     }
   }

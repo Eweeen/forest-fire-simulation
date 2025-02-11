@@ -7,7 +7,8 @@ const grid = ref<CaseState[][]>([]);
 const defaultParams = ref<ForestParams>({
   width: 20,
   height: 20,
-  terrainType: 'continue'
+  terrainType: 'continue',
+  humidity: 'normal'
 });
 
 const step = ref<number>(0);

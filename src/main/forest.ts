@@ -2,6 +2,7 @@ interface CaseState {
   vegetation: boolean; // true = végétation, false = inerte
   fireState: 'none' | 'burning' | 'hot' | 'cold';
   burningIteration: number; // Nombre d'itérations depuis l'allumage du feu
+  road: boolean;
 }
 
 interface ForestParams {
@@ -9,6 +10,13 @@ interface ForestParams {
   height: number;
   terrainType: 'continue' | 'closely-spaced' | 'spaced' | 'sparse';
   humidity: 'wet' | 'normal' | 'dry' | 'very_dry';
+  road?: Road;
+}
+
+interface Road {
+  position: number;
+  width: number;
+  orientation: 'horizontal' | 'vertical';
 }
 
 interface WindDistribution {
@@ -109,9 +117,31 @@ export const createGround = (params: ForestParams): CaseState[][] => {
     Array.from({ length: params.height }, () => ({
       vegetation: Math.random() < TERRAIN_DISTRIBUTION[params.terrainType],
       fireState: 'none',
-      burningIteration: 0
+      burningIteration: 0,
+      road: false
     }))
   );
+
+  // Placez la route
+  if (params.road) {
+    const { position, width, orientation } = params.road;
+
+    if (orientation === 'horizontal') {
+      for (let w = 0; w < params.width; w++) {
+        for (let i = position; i < position + width; i++) {
+          grid[w][i].road = true;
+          grid[w][i].vegetation = false;
+        }
+      }
+    } else {
+      for (let h = 0; h < params.height; h++) {
+        for (let i = position; i < position + width; i++) {
+          grid[i][h].road = true;
+          grid[i][h].vegetation = false;
+        }
+      }
+    }
+  }
 
   // Placez les deux cases enflammées aléatoirement
   const x1 = Math.floor(Math.random() * params.width);

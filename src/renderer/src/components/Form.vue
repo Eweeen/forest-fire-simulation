@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PropType, ref } from 'vue';
+import { PropType, ref, watch } from 'vue';
 import Input from './Input.vue';
 import Select from './Select.vue';
 
@@ -9,6 +9,13 @@ export interface ForestParams {
   terrainType: 'continue' | 'closely-spaced' | 'spaced' | 'sparse';
   humidity: 'wet' | 'normal' | 'dry' | 'very_dry';
   windStrength: 0 | 1 | 2 | 3;
+  road?: Road;
+}
+
+interface Road {
+  position: number;
+  width: number;
+  orientation: 'horizontal' | 'vertical';
 }
 
 const emits = defineEmits(['start', 'stop']);
@@ -29,7 +36,8 @@ const params = ref<ForestParams>({
   height: 20,
   terrainType: 'continue',
   humidity: 'normal',
-  windStrength: 1
+  windStrength: 1,
+  road: undefined
 });
 
 const terrainType = [
@@ -52,6 +60,29 @@ const windStrength = [
   { id: 2, name: '2' },
   { id: 3, name: '3' }
 ];
+
+const road = ref<Road | undefined>(undefined);
+
+const orientation = [
+  { id: 'horizontal', name: 'Horizontal' },
+  { id: 'vertical', name: 'Vertical' }
+];
+
+function addRoad(): void {
+  road.value = {
+    position: 3,
+    width: 2,
+    orientation: 'vertical'
+  };
+}
+
+function removeRoad(): void {
+  road.value = undefined;
+}
+
+watch(road, (value) => {
+  if (value) params.value.road = value;
+});
 </script>
 
 <template>
@@ -72,6 +103,20 @@ const windStrength = [
         name="windStrength"
         :data="windStrength"
       />
+
+      <div v-if="road" class="add-road">
+        <Input v-model="road.position" label="Position" type="number" name="position" :min="0" />
+        <Input v-model="road.width" label="Largeur" type="number" name="road-width" :min="1" />
+        <Select
+          v-model="road.orientation"
+          label="Orientation"
+          name="orientation"
+          :data="orientation"
+        />
+        <button style="margin-top: 12px" @click="removeRoad()">Retirer la route</button>
+      </div>
+
+      <button v-else style="margin-top: 12px" @click="addRoad()">Ajouter une route</button>
     </div>
 
     <button @click="interval ? emits('stop') : emits('start', params)">

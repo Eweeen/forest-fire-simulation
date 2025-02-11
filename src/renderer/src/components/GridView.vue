@@ -5,6 +5,7 @@ export interface CaseState {
   vegetation: boolean; // true = végétation, false = inerte
   fireState: 'none' | 'burning' | 'hot' | 'cold';
   burningIteration: number; // Nombre d'itérations depuis l'allumage du feu
+  road: boolean;
 }
 
 const props = defineProps({
@@ -30,7 +31,7 @@ const getCellClass = (cell: CaseState): string => {
     case 'cold':
       return 'cold';
     default:
-      return cell.vegetation ? `vegetation ${props.params.humidity}` : 'empty';
+      return cell.vegetation ? `vegetation ${props.params.humidity}` : cell.road ? 'road' : 'empty';
   }
 };
 </script>

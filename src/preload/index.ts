@@ -9,6 +9,7 @@ interface CaseState {
 interface ForestParams {
   width: number;
   height: number;
+  terrainType: 'continue' | 'closely-spaced' | 'spaced' | 'sparse';
 }
 
 // Custom APIs for renderer

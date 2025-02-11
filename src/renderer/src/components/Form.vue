@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { PropType, ref } from 'vue';
 import Input from './Input.vue';
+import Select from './Select.vue';
 
 export interface ForestParams {
   width: number;
   height: number;
+  terrainType: 'continue' | 'closely-spaced' | 'spaced' | 'sparse';
 }
 
 const emits = defineEmits(['start', 'stop']);
@@ -22,8 +24,16 @@ defineProps({
 
 const params = ref<ForestParams>({
   width: 20,
-  height: 20
+  height: 20,
+  terrainType: 'continue'
 });
+
+const terrainType = [
+  { id: 'continue', name: 'Continue (100%)' },
+  { id: 'closely-spaced', name: 'Peu espacée (95%)' },
+  { id: 'spaced', name: 'Espacée (80%)' },
+  { id: 'sparse', name: 'Clairsemée (50%)' }
+];
 </script>
 
 <template>
@@ -31,6 +41,12 @@ const params = ref<ForestParams>({
     <div class="form">
       <Input v-model="params.width" label="Largeur" type="number" name="width" :min="5" />
       <Input v-model="params.height" label="Longueur" type="number" name="height" :min="5" />
+      <Select
+        v-model="params.terrainType"
+        label="Type de terrain"
+        name="terrainType"
+        :data="terrainType"
+      />
     </div>
 
     <button @click="interval ? emits('stop') : emits('start', params)">

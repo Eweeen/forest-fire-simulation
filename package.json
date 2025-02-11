@@ -1,10 +1,10 @@
 {
   "name": "forest-fire-simulation",
   "version": "1.0.0",
-  "description": "An Electron application with Vue and TypeScript",
-  "main": "./out/main/index.js",
-  "author": "example.com",
-  "homepage": "https://electron-vite.org",
+  "description": "A fire forest simulation in Electron with Vue and TypeScript",
+  "main": "app/main/index.js",
+  "author": "Ewen",
+  "homepage": "https://github.com/Eweeen/forest-fire-simulation",
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts,.vue --fix",
@@ -18,7 +18,11 @@
     "build:unpack": "npm run build && electron-builder --dir",
     "build:win": "npm run build && electron-builder --win",
     "build:mac": "npm run build && electron-builder --mac",
-    "build:linux": "npm run build && electron-builder --linux"
+    "build:linux": "npm run build && electron-builder --linux",
+    "prepackage": "mkdir -p app/main && cp -r out/main/* app/main/",
+    "package": "npm run prepackage && electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.0",
@@ -26,6 +30,13 @@
     "electron-updater": "^6.1.7"
   },
   "devDependencies": {
+    "@electron-forge/cli": "^7.6.1",
+    "@electron-forge/maker-deb": "^7.6.1",
+    "@electron-forge/maker-rpm": "^7.6.1",
+    "@electron-forge/maker-snap": "^7.6.1",
+    "@electron-forge/maker-squirrel": "^7.6.1",
+    "@electron-forge/maker-zip": "^7.6.1",
+    "@electron-forge/publisher-github": "^7.6.1",
     "@electron-toolkit/eslint-config": "^1.0.2",
     "@electron-toolkit/eslint-config-ts": "^2.0.0",
     "@electron-toolkit/tsconfig": "^1.0.1",
@@ -41,7 +52,7 @@
     "eslint-plugin-vue": "^9.26.0",
     "prettier": "^3.3.2",
     "typescript": "^5.5.2",
-    "vite": "^6.0.11",
+    "vite": "^5.2.10",
     "vue": "^3.4.30",
     "vue-tsc": "^2.0.22"
   }

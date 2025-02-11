@@ -1,26 +1,67 @@
 <script setup lang="ts">
-import Versions from './components/Versions.vue'
+import { ref, toRaw } from 'vue';
+import GridView, { CaseState } from './components/GridView.vue';
+import Form, { ForestParams } from './components/Form.vue';
 
-const ipcHandle = () => window.electron.ipcRenderer.send('ping')
+const grid = ref<CaseState[][]>([]);
+const defaultParams = ref<ForestParams>({
+  width: 20,
+  height: 20
+});
+
+const step = ref<number>(0);
+const interval = ref<NodeJS.Timeout | null>(null);
+
+const startSimulation = async (params: ForestParams): Promise<void> => {
+  step.value = 1;
+  Object.assign(defaultParams.value, params);
+  const rawParams = toRaw(defaultParams.value);
+
+  grid.value = await window.forest.createGround(rawParams);
+
+  interval.value = setInterval(async () => {
+    step.value++;
+    const serializable = JSON.parse(JSON.stringify(grid.value));
+    const { grid: newGrid, isFinished } = await window.forest.simulateStep(serializable, rawParams);
+
+    grid.value = newGrid;
+    if (isFinished) {
+      stopSimulation();
+    }
+  }, 1000);
+};
+
+const stopSimulation = (): void => {
+  if (interval.value) {
+    clearInterval(interval.value);
+    interval.value = null;
+  }
+};
 </script>
 
 <template>
-  <img alt="logo" class="logo" src="./assets/electron.svg" />
-  <div class="creator">Powered by electron-vite</div>
-  <div class="text">
-    Build an Electron app with
-    <span class="vue">Vue</span>
-    and
-    <span class="ts">TypeScript</span>
+  <div class="container">
+    <Form :interval :step @start="startSimulation($event)" @stop="stopSimulation()" />
+    <p v-if="step > 0" class="step">Step {{ step }}</p>
+
+    <GridView :grid :params="defaultParams" />
   </div>
-  <p class="tip">Please try pressing <code>F12</code> to open the devTool</p>
-  <div class="actions">
-    <div class="action">
-      <a href="https://electron-vite.org/" target="_blank" rel="noreferrer">Documentation</a>
-    </div>
-    <div class="action">
-      <a target="_blank" rel="noreferrer" @click="ipcHandle">Send IPC</a>
-    </div>
-  </div>
-  <Versions />
 </template>
+
+<style scoped>
+.container {
+  display: flex;
+}
+
+.step {
+  position: absolute;
+  width: 100px;
+  text-align: center;
+  bottom: 12px;
+  right: 12px;
+  background: #f4f4f4;
+  color: #000;
+  padding: 4px;
+  border-radius: 4px;
+}
+</style>

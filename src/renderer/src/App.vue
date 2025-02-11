@@ -6,7 +6,8 @@ import Form, { ForestParams } from './components/Form.vue';
 const grid = ref<CaseState[][]>([]);
 const defaultParams = ref<ForestParams>({
   width: 20,
-  height: 20
+  height: 20,
+  terrainType: 'continue'
 });
 
 const step = ref<number>(0);

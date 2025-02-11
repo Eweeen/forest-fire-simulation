@@ -7,6 +7,7 @@ interface CaseState {
 interface ForestParams {
   width: number;
   height: number;
+  terrainType: 'continue' | 'closely-spaced' | 'spaced' | 'sparse';
 }
 
 interface WindDistribution {
@@ -19,6 +20,13 @@ interface Result {
   grid: CaseState[][];
   isFinished: boolean;
 }
+
+const TERRAIN_DISTRIBUTION = {
+  continue: 1,
+  'closely-spaced': 0.95,
+  spaced: 0.8,
+  sparse: 0.5
+};
 
 const WIND_DISTRIBUTION: Record<number, WindDistribution[]> = {
   0: [
@@ -48,7 +56,7 @@ const WIND_DISTRIBUTION: Record<number, WindDistribution[]> = {
 export const createGround = (params: ForestParams): CaseState[][] => {
   const grid: CaseState[][] = Array.from({ length: params.width }, () =>
     Array.from({ length: params.height }, () => ({
-      vegetation: true,
+      vegetation: Math.random() < TERRAIN_DISTRIBUTION[params.terrainType],
       fireState: 'none',
       burningIteration: 0
     }))

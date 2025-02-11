@@ -1,6 +1,6 @@
 {
   "name": "forest-fire-simulation",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A fire forest simulation in Electron with Vue and TypeScript",
   "main": "app/main/index.js",
   "author": "Ewen",
@@ -19,7 +19,8 @@
     "build:win": "npm run build && electron-builder --win",
     "build:mac": "npm run build && electron-builder --mac",
     "build:linux": "npm run build && electron-builder --linux",
-    "prepackage": "mkdir -p app/main && cp -r out/main/* app/main/",
+    "createfolder": "mkdir -p out/main && mkdir -p out/preload && mkdir -p out/renderer",
+    "prepackage": "rm -rf app/* && npm run createfolder && cp -r out/main app/main && cp -r out/preload app/ && cp -r out/renderer app/",
     "package": "npm run prepackage && electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish"

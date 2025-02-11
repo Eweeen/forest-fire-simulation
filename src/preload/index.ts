@@ -10,6 +10,7 @@ interface ForestParams {
   width: number;
   height: number;
   terrainType: 'continue' | 'closely-spaced' | 'spaced' | 'sparse';
+  humidity: 'wet' | 'normal' | 'dry' | 'very_dry';
 }
 
 // Custom APIs for renderer

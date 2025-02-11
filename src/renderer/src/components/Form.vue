@@ -7,6 +7,7 @@ export interface ForestParams {
   width: number;
   height: number;
   terrainType: 'continue' | 'closely-spaced' | 'spaced' | 'sparse';
+  humidity: 'wet' | 'normal' | 'dry' | 'very_dry';
 }
 
 const emits = defineEmits(['start', 'stop']);
@@ -25,7 +26,8 @@ defineProps({
 const params = ref<ForestParams>({
   width: 20,
   height: 20,
-  terrainType: 'continue'
+  terrainType: 'continue',
+  humidity: 'normal'
 });
 
 const terrainType = [
@@ -33,6 +35,13 @@ const terrainType = [
   { id: 'closely-spaced', name: 'Peu espacée (95%)' },
   { id: 'spaced', name: 'Espacée (80%)' },
   { id: 'sparse', name: 'Clairsemée (50%)' }
+];
+
+const humidity = [
+  { id: 'wet', name: 'Humide' },
+  { id: 'normal', name: 'Normal' },
+  { id: 'dry', name: 'Sec' },
+  { id: 'very_dry', name: 'Très sec' }
 ];
 </script>
 
@@ -47,6 +56,7 @@ const terrainType = [
         name="terrainType"
         :data="terrainType"
       />
+      <Select v-model="params.humidity" label="Humidité" name="humidity" :data="humidity" />
     </div>
 
     <button @click="interval ? emits('stop') : emits('start', params)">

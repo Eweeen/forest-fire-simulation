@@ -1,22 +1,30 @@
-import { contextBridge } from 'electron'
-import { electronAPI } from '@electron-toolkit/preload'
+import { contextBridge, ipcRenderer } from 'electron';
+
+interface CaseState {
+  vegetation: boolean; // true = végétation, false = inerte
+  fireState: 'none' | 'burning' | 'hot' | 'cold';
+  burningIteration: number; // Nombre d'itérations depuis l'allumage du feu
+}
+
+interface ForestParams {
+  width: number;
+  height: number;
+}
 
 // Custom APIs for renderer
-const api = {}
+const forest = {
+  createGround: (params: ForestParams) => ipcRenderer.invoke('forest:createGround', params),
+  simulateStep: (grid: CaseState[][], params: ForestParams) =>
+    ipcRenderer.invoke('forest:simulateStep', grid, params)
+};
 
-// Use `contextBridge` APIs to expose Electron APIs to
-// renderer only if context isolation is enabled, otherwise
-// just add to the DOM global.
 if (process.contextIsolated) {
   try {
-    contextBridge.exposeInMainWorld('electron', electronAPI)
-    contextBridge.exposeInMainWorld('api', api)
+    contextBridge.exposeInMainWorld('forest', forest);
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
 } else {
   // @ts-ignore (define in dts)
-  window.electron = electronAPI
-  // @ts-ignore (define in dts)
-  window.api = api
+  window.forest = forest;
 }

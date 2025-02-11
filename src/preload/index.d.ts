@@ -1,8 +1,13 @@
-import { ElectronAPI } from '@electron-toolkit/preload'
+export {};
 
 declare global {
   interface Window {
-    electron: ElectronAPI
-    api: unknown
+    forest: {
+      createGround: (params: ForestParams) => Promise<CaseState[][]>;
+      simulateStep: (
+        arg: CaseState[][],
+        params: ForestParams
+      ) => Promise<{ grid: CaseState[][]; isFinished: boolean }>;
+    };
   }
 }
